@@ -495,6 +495,9 @@
         </div>
         <div class="question">
             <p>６</p>
+            <div class="image-placeholder">
+                <img src="https://freeillust-classic.com/wp-content/uploads/0208000027.png" alt="５冊">
+            </div>
             <div class="options">
                 <div class="option">
                     <input type="radio" id="q6-1" name="q6">
@@ -1293,6 +1296,48 @@
 
         let startTime = null;
         let timerInterval = null;
+        // Shuffle array using Fisher-Yates algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Shuffle answer options for all questions and examples
+        function shuffleOptions() {
+            const questionIds = ['q1-rei', 'q2-REI', ...Array.from({length: 28}, (_, i) => `q${i+1}`)];
+            questionIds.forEach(qId => {
+                const optionsContainer = document.querySelector(`input[name="${qId}"]`)?.closest('.options');
+                if (!optionsContainer) return;
+
+                const options = Array.from(optionsContainer.querySelectorAll('.option'));
+                const optionData = options.map(option => ({
+                    inputId: option.querySelector('input').id,
+                    inputName: option.querySelector('input').name,
+                    labelText: option.querySelector('label').textContent.replace(/^\d+\.\s*/, ''),
+                    labelFor: option.querySelector('label').getAttribute('for'),
+                    isChecked: option.querySelector('input').checked
+                }));
+
+                // Shuffle options
+                const shuffledOptions = shuffleArray(optionData);
+
+                // Update DOM with shuffled options
+                optionsContainer.innerHTML = '';
+                shuffledOptions.forEach((data, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    optionDiv.innerHTML = `
+                        <input type="radio" id="${data.inputId}" name="${data.inputName}" ${data.isChecked ? 'checked' : ''}>
+                        <label for="${data.inputId}">${data.labelText}</label>
+                    `;
+                    optionsContainer.appendChild(optionDiv);
+                });
+            });
+        }
+
 
         function normalizeString(str) {
             return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '');
@@ -1607,7 +1652,7 @@
                 return;
             }
 
-                        messageInfo.textContent = '';
+            messageInfo.textContent = '';
             document.getElementById('start-test').style.display = 'none';
             document.getElementById('history-test').style.display = 'none';
             document.querySelectorAll('.question-section').forEach(section => {
@@ -1615,6 +1660,7 @@
             });
             document.getElementById('submit-test').style.display = 'block';
             document.getElementById('timer').style.display = 'block';
+            shuffleOptions(); // Shuffle options when starting the test
             startTimer();
         });
 
