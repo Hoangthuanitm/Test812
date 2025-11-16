@@ -6,6 +6,7 @@
     <title>模擬テスト 第8～12課（げんごちしき）</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        /* [Giữ nguyên toàn bộ CSS như cũ] */
         body {
             font-family: 'Noto Sans JP', 'Roboto', sans-serif;
             max-width: 800px;
@@ -342,7 +343,6 @@
         <h2>第8～12課（げんごちしき：もじ・ごい／文法・読解）</h2>
         <p>（40分）</p>
     </div>
-
     <div class="student-info">
         <div>
             <label for="name">名前（なまえ）:</label>
@@ -357,14 +357,11 @@
             <input type="date" id="date" name="date">
         </div>
     </div>
-
     <button id="start-test" type="button">Bắt đầu làm bài</button>
     <button id="history-test" type="button" onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
     <div id="message-info" class="error-message"></div>
-
     <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 40:00</div>
-
-    <div class="question-section">
+     <div class="question-section">
         <h2>問題Ⅰ．ただしい こたえを えらんでください。 （2*6=12）</h2>
         <div class="vietnamese">Hãy chọn câu trả lời đúng</div>
         <div class="example">
@@ -1007,7 +1004,7 @@
             <div class="answer-feedback" id="feedback-30"></div>
         </div>
         <div class="question">
-            <p>３１ きのう、ともだち（に／わたし／プレゼント／を／あげました／は）。</p>
+            <p>３１ きのう、（ともだち／に／わたし／プレゼント／を／あげました／は）。</p>
             <input type="text" id="q31" class="text-input" placeholder="Viết câu hoàn chỉnh">
             <div class="answer-feedback" id="feedback-31"></div>
         </div>
@@ -1234,15 +1231,13 @@
             <div class="answer-feedback" id="feedback-43"></div>
         </div>
     </div>
-
+   
     <button id="submit-test" type="button" style="display: none;">テストを提出する (Nộp bài)</button>
     <div id="message-result" class="error-message"></div>
-
     <div class="result-section" id="results">
         <h2>採点結果 (Kết quả)</h2>
         <div id="score-display"></div>
     </div>
-
     <div class="password-modal" id="password-modal">
         <div class="password-box">
             <h2>Nhập mật khẩu</h2>
@@ -1254,7 +1249,6 @@
             <div id="password-error" class="password-error"></div>
         </div>
     </div>
-
     <footer>
         <p>© 2025 Tài liệu kiểm tra | Thiết kế bởi Thuận</p>
     </footer>
@@ -1263,7 +1257,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAfy4QMD9_7PyFHpInNdKDRWuW4AYCtLJ4",
             authDomain: "history-e4633.firebaseapp.com",
@@ -1274,20 +1267,19 @@
             measurementId: "G-DC055090BW"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
         const answerKey = {
-            1: 1, 2: 1, 3: 1, 4: 1, 5: 2, 6: 1, // 問題 I
-            7: 1, 8: 1, 9: 2, 10: 1, 11: 1, 12: 2, 13: 1, 14: 1, 15: 1, // 問題 II
-            16: 1, 17: 2, 18: 1, 19: 1, 20: 1, 21: 1, 22: 1, 23: 1, 24: 2, 25: 1, 26: 1, 27: 2, 28: 1, 29: 1, // 問題 III
-            30: "でんわはつくえのうえにあります。", // 問題 IV
-            31: "きのう、わたしはともだちにプレゼントをあげました。", 
-            32: "このほんはいちばんおもしろいほんです。", 
-            33: "せんせいはわたしにほんをくれました。", 
-            34: 2, 35: 2, 36: 1, 37: 2, 38: 1, // 問題 V
-            39: 1, 40: 1, 41: 1, 42: 1, 43: 1 // 問題 VI
+            1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1,
+            7: 1, 8: 1, 9: 2, 10: 1, 11: 1, 12: 2, 13: 1, 14: 1, 15: 1,
+            16: 1, 17: 2, 18: 1, 19: 1, 20: 2, 21: 3, 22: 3, 23: 1, 24: 2, 25: 1, 26: 1, 27: 2, 28: 1, 29: 1,
+            30: "でんわはつくえのうえにあります。",
+            31: "きのう、わたしはともだちにプレゼントをあげました。",
+            32: "このほんはいちばんおもしろいほんです。",
+            33: "せんせいはわたしにほんをくれました。",
+            34: 2, 35: 2, 36: 1, 37: 2, 38: 1,
+            39: 1, 40: 1, 41: 1, 42: 1, 43: 1
         };
 
         const sectionPoints = {
@@ -1296,48 +1288,12 @@
 
         let startTime = null;
         let timerInterval = null;
-        // Shuffle array using Fisher-Yates algorithm
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
 
-        // Shuffle answer options for all questions and examples
-        function shuffleOptions() {
-            const questionIds = ['q1-rei', 'q2-REI', ...Array.from({length: 28}, (_, i) => `q${i+1}`)];
-            questionIds.forEach(qId => {
-                const optionsContainer = document.querySelector(`input[name="${qId}"]`)?.closest('.options');
-                if (!optionsContainer) return;
-
-                const options = Array.from(optionsContainer.querySelectorAll('.option'));
-                const optionData = options.map(option => ({
-                    inputId: option.querySelector('input').id,
-                    inputName: option.querySelector('input').name,
-                    labelText: option.querySelector('label').textContent.replace(/^\d+\.\s*/, ''),
-                    labelFor: option.querySelector('label').getAttribute('for'),
-                    isChecked: option.querySelector('input').checked
-                }));
-
-                // Shuffle options
-                const shuffledOptions = shuffleArray(optionData);
-
-                // Update DOM with shuffled options
-                optionsContainer.innerHTML = '';
-                shuffledOptions.forEach((data, index) => {
-                    const optionDiv = document.createElement('div');
-                    optionDiv.className = 'option';
-                    optionDiv.innerHTML = `
-                        <input type="radio" id="${data.inputId}" name="${data.inputName}" ${data.isChecked ? 'checked' : ''}>
-                        <label for="${data.inputId}">${data.labelText}</label>
-                    `;
-                    optionsContainer.appendChild(optionDiv);
-                });
-            });
-        }
-
+        // Đặt ngày mặc định là hôm nay
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        });
 
         function normalizeString(str) {
             return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '');
@@ -1427,7 +1383,6 @@
             startTime = new Date();
             const endTime = new Date(startTime.getTime() + 40 * 60 * 1000);
             const timerElement = document.getElementById('timer');
-
             timerInterval = setInterval(() => {
                 const now = new Date();
                 const timeLeft = endTime - now;
@@ -1616,7 +1571,8 @@
         function resetTest() {
             document.getElementById('name').value = '';
             document.getElementById('class').value = '';
-            document.getElementById('date').value = '';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
             document.getElementById('message-info').textContent = '';
             document.getElementById('message-result').textContent = '';
             document.getElementById('results').style.display = 'none';
@@ -1660,7 +1616,6 @@
             });
             document.getElementById('submit-test').style.display = 'block';
             document.getElementById('timer').style.display = 'block';
-            shuffleOptions(); // Shuffle options when starting the test
             startTimer();
         });
 
